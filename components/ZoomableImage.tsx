@@ -27,17 +27,14 @@ export const ZoomableImage = ({children,
     const nav = useNavigation();
     useEffect(()=>{
       const listener = (e: any) => {
-        if(!zoomMode || !zoomModeOff) return;
         if(zoomModeOff && zoomMode) {
           e.preventDefault();
           zoomModeOff();
         }
       };
-      nav.addListener('beforeRemove', listener);
-      return () => {
-        nav.removeListener('beforeRemove', listener);
-      }
-    }, []);
+      const unsubscribe = nav.addListener('beforeRemove', listener);
+      return unsubscribe;
+    }, [nav]);
   if(!zoomMode) return (
     <>
       {children}
